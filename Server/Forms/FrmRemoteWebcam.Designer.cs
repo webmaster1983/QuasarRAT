@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmRemoteWebcam));
             this.btnShow = new System.Windows.Forms.Button();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.cbResolutions = new System.Windows.Forms.ComboBox();
             this.cbWebcams = new System.Windows.Forms.ComboBox();
             this.btnHide = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
@@ -42,7 +43,7 @@
             // 
             // btnShow
             // 
-            this.btnShow.Location = new System.Drawing.Point(389, 84);
+            this.btnShow.Location = new System.Drawing.Point(388, 115);
             this.btnShow.Name = "btnShow";
             this.btnShow.Size = new System.Drawing.Size(54, 19);
             this.btnShow.TabIndex = 10;
@@ -55,14 +56,25 @@
             // panelTop
             // 
             this.panelTop.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelTop.Controls.Add(this.cbResolutions);
             this.panelTop.Controls.Add(this.cbWebcams);
             this.panelTop.Controls.Add(this.btnHide);
             this.panelTop.Controls.Add(this.btnStart);
             this.panelTop.Controls.Add(this.btnStop);
             this.panelTop.Location = new System.Drawing.Point(330, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(181, 76);
+            this.panelTop.Size = new System.Drawing.Size(181, 109);
             this.panelTop.TabIndex = 9;
+            // 
+            // cbResolutions
+            // 
+            this.cbResolutions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbResolutions.FormattingEnabled = true;
+            this.cbResolutions.Location = new System.Drawing.Point(15, 57);
+            this.cbResolutions.Name = "cbResolutions";
+            this.cbResolutions.Size = new System.Drawing.Size(149, 21);
+            this.cbResolutions.TabIndex = 9;
+            this.cbResolutions.TabStop = false;
             // 
             // cbWebcams
             // 
@@ -73,10 +85,11 @@
             this.cbWebcams.Size = new System.Drawing.Size(149, 21);
             this.cbWebcams.TabIndex = 8;
             this.cbWebcams.TabStop = false;
+            this.cbWebcams.SelectedIndexChanged += new System.EventHandler(this.cbWebcams_SelectedIndexChanged);
             // 
             // btnHide
             // 
-            this.btnHide.Location = new System.Drawing.Point(57, 54);
+            this.btnHide.Location = new System.Drawing.Point(57, 84);
             this.btnHide.Name = "btnHide";
             this.btnHide.Size = new System.Drawing.Size(54, 19);
             this.btnHide.TabIndex = 7;
@@ -125,8 +138,8 @@
             // 
             // FrmRemoteWebcam
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(794, 562);
             this.Controls.Add(this.btnShow);
             this.Controls.Add(this.panelTop);
@@ -134,6 +147,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(480, 320);
             this.Name = "FrmRemoteWebcam";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmRemoteWebcam []";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmRemoteWebcam_FormClosing);
             this.Load += new System.EventHandler(this.FrmRemoteWebcam_Load);
@@ -154,5 +168,6 @@
         private System.Windows.Forms.Button btnHide;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.ComboBox cbResolutions;
     }
 }
